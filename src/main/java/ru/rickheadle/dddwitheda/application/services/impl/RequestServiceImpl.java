@@ -5,10 +5,10 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.rickheadle.dddwitheda.application.services.RequestService;
-import ru.rickheadle.dddwitheda.domain.Request;
-import ru.rickheadle.dddwitheda.domain.TechSupportExpert;
+import ru.rickheadle.dddwitheda.domain.entity.Request;
+import ru.rickheadle.dddwitheda.domain.entity.TechSupportExpert;
+import ru.rickheadle.dddwitheda.domain.valueobject.Status;
 import ru.rickheadle.dddwitheda.repository.RequestRepository;
-import ru.rickheadle.dddwitheda.valueobject.Status;
 
 @Service
 public class RequestServiceImpl implements RequestService {

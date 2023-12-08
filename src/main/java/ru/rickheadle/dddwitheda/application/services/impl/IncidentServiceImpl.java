@@ -5,13 +5,13 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.rickheadle.dddwitheda.application.services.IncidentService;
-import ru.rickheadle.dddwitheda.domain.Incident;
-import ru.rickheadle.dddwitheda.domain.TechSupportExpert;
+import ru.rickheadle.dddwitheda.domain.entity.Incident;
+import ru.rickheadle.dddwitheda.domain.entity.TechSupportExpert;
+import ru.rickheadle.dddwitheda.domain.valueobject.IncidentEmergency;
+import ru.rickheadle.dddwitheda.domain.valueobject.IncidentInfluence;
+import ru.rickheadle.dddwitheda.domain.valueobject.IncidentPriority;
+import ru.rickheadle.dddwitheda.domain.valueobject.Status;
 import ru.rickheadle.dddwitheda.repository.IncidentRepository;
-import ru.rickheadle.dddwitheda.valueobject.IncidentEmergency;
-import ru.rickheadle.dddwitheda.valueobject.IncidentInfluence;
-import ru.rickheadle.dddwitheda.valueobject.IncidentPriority;
-import ru.rickheadle.dddwitheda.valueobject.Status;
 
 @Service
 public class IncidentServiceImpl implements IncidentService {

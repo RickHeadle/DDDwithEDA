@@ -1,9 +1,9 @@
-package ru.rickheadle.dddwitheda.event;
+package ru.rickheadle.dddwitheda.domain.event;
 
 import java.time.ZonedDateTime;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
-import ru.rickheadle.dddwitheda.domain.Incident;
+import ru.rickheadle.dddwitheda.domain.entity.Incident;
 
 @Getter
 public class IncidentCreatedEvent extends ApplicationEvent {

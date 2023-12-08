@@ -1,4 +1,4 @@
-package ru.rickheadle.dddwitheda.domain;
+package ru.rickheadle.dddwitheda.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;

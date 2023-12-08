@@ -1,15 +1,15 @@
-package ru.rickheadle.dddwitheda.listener;
+package ru.rickheadle.dddwitheda.domain.listener;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import ru.rickheadle.dddwitheda.event.IncidentCreatedEvent;
+import ru.rickheadle.dddwitheda.domain.event.IncidentCreatedEvent;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class IncidentListener {
+public class IncidentCreatedListener {
 
   @EventListener(IncidentCreatedEvent.class)
   public void handle(IncidentCreatedEvent event) {

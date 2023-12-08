@@ -1,4 +1,4 @@
-package ru.rickheadle.dddwitheda.valueobject;
+package ru.rickheadle.dddwitheda.domain.valueobject;
 
 public enum SupportLevel {
 

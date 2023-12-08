@@ -1,4 +1,4 @@
-package ru.rickheadle.dddwitheda.valueobject;
+package ru.rickheadle.dddwitheda.domain.valueobject;
 
 import java.util.Arrays;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package ru.rickheadle.dddwitheda.domain;
+package ru.rickheadle.dddwitheda.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -10,10 +10,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.NonNull;
-import ru.rickheadle.dddwitheda.valueobject.IncidentEmergency;
-import ru.rickheadle.dddwitheda.valueobject.IncidentInfluence;
-import ru.rickheadle.dddwitheda.valueobject.IncidentPriority;
-import ru.rickheadle.dddwitheda.valueobject.Status;
+import ru.rickheadle.dddwitheda.domain.valueobject.IncidentEmergency;
+import ru.rickheadle.dddwitheda.domain.valueobject.IncidentInfluence;
+import ru.rickheadle.dddwitheda.domain.valueobject.IncidentPriority;
+import ru.rickheadle.dddwitheda.domain.valueobject.Status;
 
 @Getter
 @Setter
