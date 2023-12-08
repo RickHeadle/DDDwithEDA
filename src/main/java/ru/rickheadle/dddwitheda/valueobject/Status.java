@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum IncidentStatus {
+public enum Status {
 
   /**
    * Инцидент/запрос зарегистрирован и ожидает классификации.

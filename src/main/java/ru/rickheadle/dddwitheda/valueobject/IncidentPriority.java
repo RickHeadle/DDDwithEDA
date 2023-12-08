@@ -12,29 +12,30 @@ import org.springframework.lang.NonNull;
 public enum IncidentPriority {
 
   /**
-   * Пользователи или системы не затронуты.
+   * Инцидент не является приоритетным.
+   * Он будет взят в работу только тогда, когда будут устранены более приоритетные инциденты.
    */
   NONE ("Нет", 0),
 
   /**
-   * Затронут один пользователь или одна система.
+   * Инцидент имеет низкий приоритет.
    */
-  LOW ("Низкое", 1),
+  LOW ("Низкий", 1),
 
   /**
-   * Затронута небольшая группа пользователей или систем.
+   * Инцидент имеет средний приоритет.
    */
-  MEDIUM ("Среднее", 2),
+  MEDIUM ("Средний", 2),
 
   /**
-   * затронута большая группа пользователей или систем.
+   * Инцидент имеет высокий приоритет.
    */
-  HIGH ("Высокое", 3),
+  HIGH ("Высокий", 3),
 
   /**
-   * Затронуты все пользователи или системы.
+   * Инцидент имеет максимальный приоритет, и будет обработан в первую очередь.
    */
-  EXTREME ("Очень высокое", 4);
+  EXTREME ("Очень высокий", 4);
 
   private final String name;
   private final int value;
@@ -44,4 +45,26 @@ public enum IncidentPriority {
         .filter(incidentPriority -> Objects.equals(incidentPriority.getValue(), value))
         .findFirst();
   }
+
+  public static IncidentPriority getPriority(IncidentInfluence incidentInfluence,
+      IncidentEmergency incidentEmergency) {
+    return IncidentPriority.findByValue(
+        PRIORITY_MATRIX
+            [incidentEmergency.getValue()]
+            [incidentInfluence.getValue()]
+    ).orElseThrow();
+  }
+
+  /**
+   * Матрица определения приоритета инцидента, основываясь на
+   * оценки срочности и влияния. <br>
+   * @link {@link description}/priorityMatrix.png
+   */
+  private static final int[][] PRIORITY_MATRIX = {
+      {0, 0, 0, 1, 2},
+      {0, 1, 1, 2, 3},
+      {0, 1, 2, 2, 3},
+      {1, 2, 2, 3, 4},
+      {2, 3, 3, 4, 4}
+  };
 }

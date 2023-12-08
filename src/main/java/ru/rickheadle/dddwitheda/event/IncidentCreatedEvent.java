@@ -2,16 +2,17 @@ package ru.rickheadle.dddwitheda.event;
 
 import java.time.ZonedDateTime;
 import lombok.Getter;
-import ru.rickheadle.dddwitheda.DomainEvent;
-import ru.rickheadle.dddwitheda.entity.IncidentEntity;
+import org.springframework.context.ApplicationEvent;
+import ru.rickheadle.dddwitheda.domain.Incident;
 
-public class IncidentCreatedEvent implements DomainEvent<IncidentEntity> {
+@Getter
+public class IncidentCreatedEvent extends ApplicationEvent {
 
-  @Getter
-  private final IncidentEntity incident;
+  private final Incident incident;
   private final ZonedDateTime createdAt;
 
-  public IncidentCreatedEvent(IncidentEntity incident, ZonedDateTime createdAt) {
+  public IncidentCreatedEvent(Object source, Incident incident, ZonedDateTime createdAt) {
+    super(source);
     this.incident = incident;
     this.createdAt = createdAt;
   }
