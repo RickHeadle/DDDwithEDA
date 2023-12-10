@@ -1,6 +1,7 @@
 package ru.rickheadle.dddwitheda.application.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import ru.rickheadle.dddwitheda.domain.entity.Incident;
 import ru.rickheadle.dddwitheda.domain.entity.TechSupportExpert;
@@ -17,11 +18,11 @@ public interface IncidentService {
       IncidentEmergency incidentEmergency,
       TechSupportExpert techSupportExpert);
 
-  Incident updateIncidentStatus(UUID incidentId, Status newStatus);
+  void updateIncidentStatus(UUID incidentId, Status newStatus);
 
-  Incident assignIncidentToTechSupportExpert(UUID incidentId, TechSupportExpert techSupportExpert);
+  void assignIncidentToTechSupportExpert(UUID incidentId, TechSupportExpert techSupportExpert);
 
-  Incident getIncidentById(UUID incidentId);
+  Optional<Incident> getIncidentById(UUID incidentId);
 
   List<Incident> getIncidentsByStatus(Status incidentStatus);
 

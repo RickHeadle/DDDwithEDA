@@ -1,12 +1,19 @@
 package ru.rickheadle.dddwitheda.application.services.impl;
 
+import jakarta.transaction.Transactional;
+import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.rickheadle.dddwitheda.application.services.IncidentService;
 import ru.rickheadle.dddwitheda.domain.entity.Incident;
 import ru.rickheadle.dddwitheda.domain.entity.TechSupportExpert;
+import ru.rickheadle.dddwitheda.domain.event.IncidentAssignedToTechSupportExpertEvent;
+import ru.rickheadle.dddwitheda.domain.event.IncidentCreatedEvent;
+import ru.rickheadle.dddwitheda.domain.event.IncidentStatusUpdatedEvent;
+import ru.rickheadle.dddwitheda.domain.publisher.IncidentEventPublisher;
 import ru.rickheadle.dddwitheda.domain.valueobject.IncidentEmergency;
 import ru.rickheadle.dddwitheda.domain.valueobject.IncidentInfluence;
 import ru.rickheadle.dddwitheda.domain.valueobject.IncidentPriority;
@@ -14,13 +21,17 @@ import ru.rickheadle.dddwitheda.domain.valueobject.Status;
 import ru.rickheadle.dddwitheda.repository.IncidentRepository;
 
 @Service
+@Transactional
 public class IncidentServiceImpl implements IncidentService {
 
   private final IncidentRepository incidentRepository;
+  private final IncidentEventPublisher incidentEventPublisher;
 
   @Autowired
-  public IncidentServiceImpl(IncidentRepository incidentRepository) {
+  public IncidentServiceImpl(IncidentRepository incidentRepository,
+      IncidentEventPublisher incidentEventPublisher) {
     this.incidentRepository = incidentRepository;
+    this.incidentEventPublisher = incidentEventPublisher;
   }
 
   @Override
@@ -36,27 +47,53 @@ public class IncidentServiceImpl implements IncidentService {
         .status(Status.REGISTERED)
         .techSupportExpert(techSupportExpert)
         .build();
-    return incidentRepository.save(incident);
+    incidentRepository.save(incident);
+    incidentEventPublisher.publishIncidentCreatedEvent(
+        new IncidentCreatedEvent(
+            this,
+            incident,
+            ZonedDateTime.now()
+        )
+    );
+    return incident;
   }
 
   @Override
-  public Incident updateIncidentStatus(UUID incidentId, Status newStatus) {
-    Incident incident = getIncidentById(incidentId);
-    incident.setStatus(newStatus);
-    return incidentRepository.save(incident);
+  public void updateIncidentStatus(UUID incidentId, Status newStatus) {
+    getIncidentById(incidentId)
+        .ifPresent(incident -> {
+          incident.setStatus(newStatus);
+          incidentRepository.save(incident);
+          incidentEventPublisher.publishIncidentStatusUpdatedEvent(
+              new IncidentStatusUpdatedEvent(
+                  this,
+                  incident,
+                  ZonedDateTime.now()
+              )
+          );
+        });
   }
 
   @Override
-  public Incident assignIncidentToTechSupportExpert(UUID incidentId,
+  public void assignIncidentToTechSupportExpert(UUID incidentId,
       TechSupportExpert techSupportExpert) {
-    Incident incident = getIncidentById(incidentId);
-    incident.setTechSupportExpert(techSupportExpert);
-    return incidentRepository.save(incident);
+    getIncidentById(incidentId)
+        .ifPresent(incident -> {
+          incident.setTechSupportExpert(techSupportExpert);
+          incidentRepository.save(incident);
+          incidentEventPublisher.publishIncidentAssignedToTechSupportExpertEvent(
+              new IncidentAssignedToTechSupportExpertEvent(
+                  this,
+                  incident,
+                  ZonedDateTime.now()
+              )
+          );
+        });
   }
 
   @Override
-  public Incident getIncidentById(UUID incidentId) {
-    return incidentRepository.findById(incidentId).orElseThrow();
+  public Optional<Incident> getIncidentById(UUID incidentId) {
+    return incidentRepository.findById(incidentId);
   }
 
   @Override

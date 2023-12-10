@@ -1,27 +1,38 @@
 package ru.rickheadle.dddwitheda.application.services.impl;
 
+import jakarta.transaction.Transactional;
+import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.rickheadle.dddwitheda.application.services.RequestService;
 import ru.rickheadle.dddwitheda.domain.entity.Request;
 import ru.rickheadle.dddwitheda.domain.entity.TechSupportExpert;
+import ru.rickheadle.dddwitheda.domain.event.RequestAssignedToTechSupportExpertEvent;
+import ru.rickheadle.dddwitheda.domain.event.RequestCreatedEvent;
+import ru.rickheadle.dddwitheda.domain.event.RequestStatusUpdatedEvent;
+import ru.rickheadle.dddwitheda.domain.publisher.RequestEventPublisher;
 import ru.rickheadle.dddwitheda.domain.valueobject.Status;
 import ru.rickheadle.dddwitheda.repository.RequestRepository;
 
 @Service
+@Transactional
 public class RequestServiceImpl implements RequestService {
 
   private final RequestRepository requestRepository;
+  private final RequestEventPublisher requestEventPublisher;
 
   @Autowired
-  public RequestServiceImpl(RequestRepository requestRepository) {
+  public RequestServiceImpl(RequestRepository requestRepository,
+      RequestEventPublisher requestEventPublisher) {
     this.requestRepository = requestRepository;
+    this.requestEventPublisher = requestEventPublisher;
   }
 
   @Override
-  public Request createRequest(String title, String description,
+  public void createRequest(String title, String description,
       TechSupportExpert techSupportExpert) {
     Request request = Request.builder()
         .title(title)
@@ -29,27 +40,52 @@ public class RequestServiceImpl implements RequestService {
         .status(Status.REGISTERED)
         .techSupportExpert(techSupportExpert)
         .build();
-    return requestRepository.save(request);
+    requestRepository.save(request);
+    requestEventPublisher.publishRequestCreatedEvent(
+        new RequestCreatedEvent(
+            this,
+            request,
+            ZonedDateTime.now()
+        )
+    );
   }
 
   @Override
-  public Request updateRequestStatus(UUID requestId, Status newStatus) {
-    Request request = getRequestById(requestId);
-    request.setStatus(newStatus);
-    return requestRepository.save(request);
+  public void updateRequestStatus(UUID requestId, Status newStatus) {
+    getRequestById(requestId)
+        .ifPresent(request -> {
+          request.setStatus(newStatus);
+          requestRepository.save(request);
+          requestEventPublisher.publishRequestStatusUpdatedEvent(
+              new RequestStatusUpdatedEvent(
+                  this,
+                  request,
+                  ZonedDateTime.now()
+              )
+          );
+        });
   }
 
   @Override
-  public Request assignIncidentToTechSupportExpert(UUID requestId,
+  public void assignIncidentToTechSupportExpert(UUID requestId,
       TechSupportExpert techSupportExpert) {
-    Request request = getRequestById(requestId);
-    request.setTechSupportExpert(techSupportExpert);
-    return requestRepository.save(request);
+    getRequestById(requestId)
+        .ifPresent(request -> {
+          request.setTechSupportExpert(techSupportExpert);
+          requestRepository.save(request);
+          requestEventPublisher.publishRequestAssignedToTechSupportExpertEvent(
+              new RequestAssignedToTechSupportExpertEvent(
+                  this,
+                  request,
+                  ZonedDateTime.now()
+              )
+          );
+        });
   }
 
   @Override
-  public Request getRequestById(UUID requestId) {
-    return requestRepository.findById(requestId).orElseThrow();
+  public Optional<Request> getRequestById(UUID requestId) {
+    return requestRepository.findById(requestId);
   }
 
   @Override
