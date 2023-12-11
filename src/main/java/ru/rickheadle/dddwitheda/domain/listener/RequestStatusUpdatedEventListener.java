@@ -24,7 +24,7 @@ public class RequestStatusUpdatedEventListener {
   public void onApplicationEvent(RequestStatusUpdatedEvent event) {
     requestEventPublisher.publishRequestStatusUpdatedEvent(event);
     log.info(String.format(
-        "Запросу на обслуживание присвоен новый статус: %1$s. Время создания: %2$s",
+        "Запросу на обслуживание присвоен новый статус: %1$s. Время создания события: %2$s",
         event.getRequest(),
         event.getCreatedAt()
     ));

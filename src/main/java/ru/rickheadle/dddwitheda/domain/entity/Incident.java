@@ -1,8 +1,9 @@
 package ru.rickheadle.dddwitheda.domain.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,18 +27,23 @@ public class Incident extends BaseEntity {
 
   private String title;
   private String description;
+
+  @Enumerated(EnumType.STRING)
   private IncidentPriority priority;
   private Status status;
 
   @ManyToOne
-  private Customer customer;
+  private ProductUser productUser;
 
-  @OneToOne
+  @ManyToOne
   private TechSupportExpert techSupportExpert;
 
   @NonNull
+  @Enumerated(EnumType.STRING)
   private IncidentEmergency incidentEmergency;
+
   @NonNull
+  @Enumerated(EnumType.STRING)
   private IncidentInfluence incidentInfluence;
 
 }

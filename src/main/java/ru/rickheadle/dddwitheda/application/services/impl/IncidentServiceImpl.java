@@ -8,45 +8,37 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.rickheadle.dddwitheda.application.services.IncidentService;
+import ru.rickheadle.dddwitheda.domain.create.CreateIncidentCommand;
+import ru.rickheadle.dddwitheda.domain.create.CreateIncidentResponse;
 import ru.rickheadle.dddwitheda.domain.entity.Incident;
 import ru.rickheadle.dddwitheda.domain.entity.TechSupportExpert;
 import ru.rickheadle.dddwitheda.domain.event.IncidentAssignedToTechSupportExpertEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentCreatedEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentStatusUpdatedEvent;
+import ru.rickheadle.dddwitheda.domain.mapper.IncidentDataMapper;
 import ru.rickheadle.dddwitheda.domain.publisher.IncidentEventPublisher;
-import ru.rickheadle.dddwitheda.domain.valueobject.IncidentEmergency;
-import ru.rickheadle.dddwitheda.domain.valueobject.IncidentInfluence;
-import ru.rickheadle.dddwitheda.domain.valueobject.IncidentPriority;
 import ru.rickheadle.dddwitheda.domain.valueobject.Status;
-import ru.rickheadle.dddwitheda.repository.IncidentRepository;
+import ru.rickheadle.dddwitheda.infrastructure.repository.IncidentRepository;
 
 @Service
 @Transactional
 public class IncidentServiceImpl implements IncidentService {
 
   private final IncidentRepository incidentRepository;
+  private final IncidentDataMapper incidentDataMapper;
   private final IncidentEventPublisher incidentEventPublisher;
 
   @Autowired
   public IncidentServiceImpl(IncidentRepository incidentRepository,
-      IncidentEventPublisher incidentEventPublisher) {
+      IncidentDataMapper incidentDataMapper, IncidentEventPublisher incidentEventPublisher) {
     this.incidentRepository = incidentRepository;
+    this.incidentDataMapper = incidentDataMapper;
     this.incidentEventPublisher = incidentEventPublisher;
   }
 
   @Override
-  public Incident createIncident(String title, String description,
-      IncidentInfluence incidentInfluence, IncidentEmergency incidentEmergency,
-      TechSupportExpert techSupportExpert) {
-    Incident incident = Incident.builder()
-        .title(title)
-        .description(description)
-        .incidentInfluence(incidentInfluence)
-        .incidentEmergency(incidentEmergency)
-        .priority(IncidentPriority.getPriority(incidentInfluence, incidentEmergency))
-        .status(Status.REGISTERED)
-        .techSupportExpert(techSupportExpert)
-        .build();
+  public CreateIncidentResponse createIncident(CreateIncidentCommand incidentCommand) {
+    Incident incident = incidentDataMapper.createIncidentCommandToIncident(incidentCommand);
     incidentRepository.save(incident);
     incidentEventPublisher.publishIncidentCreatedEvent(
         new IncidentCreatedEvent(
@@ -55,7 +47,8 @@ public class IncidentServiceImpl implements IncidentService {
             ZonedDateTime.now()
         )
     );
-    return incident;
+    return incidentDataMapper.incidentToCreateIncidentResponse(incident,
+        "Incident created successfully!");
   }
 
   @Override
@@ -97,13 +90,18 @@ public class IncidentServiceImpl implements IncidentService {
   }
 
   @Override
-  public List<Incident> getIncidentsByStatus(Status incidentStatus) {
+  public List<Incident> findIncidentsByStatus(Status incidentStatus) {
     return incidentRepository.findAllByStatus(incidentStatus);
   }
 
   @Override
-  public List<Incident> getIncidentsByAssignedTechSupportExpert(
+  public List<Incident> findIncidentsByAssignedTechSupportExpert(
       TechSupportExpert techSupportExpert) {
     return incidentRepository.findAllByTechSupportExpert(techSupportExpert);
+  }
+
+  @Override
+  public List<Incident> findAllIncidents() {
+    return incidentRepository.findAll();
   }
 }

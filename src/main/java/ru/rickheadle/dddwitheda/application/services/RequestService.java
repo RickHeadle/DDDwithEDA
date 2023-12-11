@@ -13,11 +13,13 @@ public interface RequestService {
 
   void updateRequestStatus(UUID requestId, Status newStatus);
 
-  void assignIncidentToTechSupportExpert(UUID requestId, TechSupportExpert techSupportExpert);
+  void assignRequestToTechSupportExpert(UUID requestId, TechSupportExpert techSupportExpert);
 
-  Optional<Request> getRequestById(UUID requestId);
+  Optional<Request> findRequestById(UUID requestId);
 
-  List<Request> getRequestsByStatus(Status status);
+  List<Request> findRequestsByStatus(Status status);
 
-  List<Request> getRequestsByTechSupportExpert(TechSupportExpert techSupportExpert);
+  List<Request> findRequestsByTechSupportExpert(TechSupportExpert techSupportExpert);
+
+  List<Request> findAllRequests();
 }

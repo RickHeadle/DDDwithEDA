@@ -1,6 +1,9 @@
 package ru.rickheadle.dddwitheda.domain.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,5 +21,7 @@ import ru.rickheadle.dddwitheda.domain.valueobject.SupportLevel;
 @Table(name = "tech_support_experts")
 public class TechSupportExpert extends BaseUser {
 
+  @Enumerated(EnumType.STRING)
+  @Column(name = "support_level", nullable = false)
   private SupportLevel supportLevel;
 }

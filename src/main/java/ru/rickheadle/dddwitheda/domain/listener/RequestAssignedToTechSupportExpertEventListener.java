@@ -25,7 +25,7 @@ public class RequestAssignedToTechSupportExpertEventListener {
     requestEventPublisher.publishRequestAssignedToTechSupportExpertEvent(event);
     log.info(String.format(
         "Запросу на обслуживание присвоен сотрудник технической поддержки: %1$s. "
-            + "Время создания: %2$s",
+            + "Время создания события: %2$s",
         event.getRequest(),
         event.getCreatedAt()
     ));

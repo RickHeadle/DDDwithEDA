@@ -23,8 +23,8 @@ public class IncidentAssignedToTechSupportExpertEventListener {
   public void onApplicationEvent(IncidentAssignedToTechSupportExpertEvent event) {
     incidentEventPublisher.publishIncidentAssignedToTechSupportExpertEvent(event);
     log.info(String.format(
-        "Инциденту присвоен сотрудник технической поддержки: %1$s. Время создания: %2$s",
-        event.getIncident(),
+        "Инциденту присвоен сотрудник технической поддержки: %1$s. Время создания события: %2$s",
+        event.getIncident().getTechSupportExpert(),
         event.getCreatedAt()));
   }
 }

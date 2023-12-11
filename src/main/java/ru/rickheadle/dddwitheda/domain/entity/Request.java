@@ -25,7 +25,7 @@ public class Request extends BaseEntity {
   private Status status;
 
   @ManyToOne
-  private Customer customer;
+  private ProductUser productUser;
 
   @OneToOne
   private TechSupportExpert techSupportExpert;

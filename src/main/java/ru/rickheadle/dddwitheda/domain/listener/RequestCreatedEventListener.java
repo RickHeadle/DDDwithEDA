@@ -23,7 +23,7 @@ public class RequestCreatedEventListener {
   public void onApplicationEvent(RequestCreatedEvent event) {
     requestEventPublisher.publishRequestCreatedEvent(event);
     log.info(String.format(
-        "Создан новый запрос на обслуживание: %1$s. Время создания: %2$s",
+        "Создан новый запрос на обслуживание: %1$s. Время создания события: %2$s",
         event.getRequest(),
         event.getCreatedAt()));
   }

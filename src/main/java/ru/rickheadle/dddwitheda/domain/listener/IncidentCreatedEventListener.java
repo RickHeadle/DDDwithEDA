@@ -22,7 +22,7 @@ public class IncidentCreatedEventListener {
       classes = IncidentCreatedEvent.class)
   public void onApplicationEvent(IncidentCreatedEvent event) {
     incidentEventPublisher.publishIncidentCreatedEvent(event);
-    log.info(String.format("Создан новый инцидент: %1$s. Время создания: %2$s",
+    log.info(String.format("Создан новый инцидент: %1$s. Время создания события: %2$s",
         event.getIncident(),
         event.getCreatedAt()));
   }

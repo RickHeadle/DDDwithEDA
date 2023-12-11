@@ -15,7 +15,7 @@ import ru.rickheadle.dddwitheda.domain.event.RequestCreatedEvent;
 import ru.rickheadle.dddwitheda.domain.event.RequestStatusUpdatedEvent;
 import ru.rickheadle.dddwitheda.domain.publisher.RequestEventPublisher;
 import ru.rickheadle.dddwitheda.domain.valueobject.Status;
-import ru.rickheadle.dddwitheda.repository.RequestRepository;
+import ru.rickheadle.dddwitheda.infrastructure.repository.RequestRepository;
 
 @Service
 @Transactional
@@ -52,7 +52,7 @@ public class RequestServiceImpl implements RequestService {
 
   @Override
   public void updateRequestStatus(UUID requestId, Status newStatus) {
-    getRequestById(requestId)
+    findRequestById(requestId)
         .ifPresent(request -> {
           request.setStatus(newStatus);
           requestRepository.save(request);
@@ -67,9 +67,9 @@ public class RequestServiceImpl implements RequestService {
   }
 
   @Override
-  public void assignIncidentToTechSupportExpert(UUID requestId,
+  public void assignRequestToTechSupportExpert(UUID requestId,
       TechSupportExpert techSupportExpert) {
-    getRequestById(requestId)
+    findRequestById(requestId)
         .ifPresent(request -> {
           request.setTechSupportExpert(techSupportExpert);
           requestRepository.save(request);
@@ -84,17 +84,22 @@ public class RequestServiceImpl implements RequestService {
   }
 
   @Override
-  public Optional<Request> getRequestById(UUID requestId) {
+  public Optional<Request> findRequestById(UUID requestId) {
     return requestRepository.findById(requestId);
   }
 
   @Override
-  public List<Request> getRequestsByStatus(Status status) {
+  public List<Request> findRequestsByStatus(Status status) {
     return requestRepository.findAllByStatus(status);
   }
 
   @Override
-  public List<Request> getRequestsByTechSupportExpert(TechSupportExpert techSupportExpert) {
+  public List<Request> findRequestsByTechSupportExpert(TechSupportExpert techSupportExpert) {
     return requestRepository.findAllByTechSupportExpert(techSupportExpert);
+  }
+
+  @Override
+  public List<Request> findAllRequests() {
+    return requestRepository.findAll();
   }
 }

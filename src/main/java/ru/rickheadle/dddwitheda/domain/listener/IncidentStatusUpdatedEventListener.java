@@ -22,7 +22,7 @@ public class IncidentStatusUpdatedEventListener {
       classes = IncidentStatusUpdatedEvent.class)
   public void onApplicationEvent(IncidentStatusUpdatedEvent event) {
     incidentEventPublisher.publishIncidentStatusUpdatedEvent(event);
-    log.info(String.format("Инциденту присвоен новый статус: %1$s. Время создания: %2$s",
+    log.info(String.format("Инциденту присвоен новый статус: %1$s. Время создания события: %2$s",
         event.getIncident(),
         event.getCreatedAt()));
   }
