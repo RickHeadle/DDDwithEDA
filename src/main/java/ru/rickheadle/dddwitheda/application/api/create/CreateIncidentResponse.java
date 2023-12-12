@@ -1,15 +1,15 @@
-package ru.rickheadle.dddwitheda.domain.create;
+package ru.rickheadle.dddwitheda.application.api.create;
 
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import ru.rickheadle.dddwitheda.domain.entity.Incident;
 
 @Getter
 @Builder
 @AllArgsConstructor
 public class CreateIncidentResponse {
 
-  private final Incident incident;
+  private final UUID incidentId;
   private final String response;
 }

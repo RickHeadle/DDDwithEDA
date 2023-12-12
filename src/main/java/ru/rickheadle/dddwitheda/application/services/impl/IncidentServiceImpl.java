@@ -7,17 +7,19 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.rickheadle.dddwitheda.application.api.assign.AssignIncidentToTechSupportExpertCommand;
+import ru.rickheadle.dddwitheda.application.api.assign.AssignIncidentToTechSupportExpertResponse;
+import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentCommand;
+import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentResponse;
+import ru.rickheadle.dddwitheda.application.api.update.UpdateIncidentStatusCommand;
+import ru.rickheadle.dddwitheda.application.api.update.UpdateIncidentStatusResponse;
+import ru.rickheadle.dddwitheda.application.mapper.IncidentDataMapper;
 import ru.rickheadle.dddwitheda.application.services.IncidentService;
-import ru.rickheadle.dddwitheda.domain.assign.AssignIncidentToTechSupportExpertCommand;
-import ru.rickheadle.dddwitheda.domain.assign.AssignIncidentToTechSupportExpertResponse;
-import ru.rickheadle.dddwitheda.domain.create.CreateIncidentCommand;
-import ru.rickheadle.dddwitheda.domain.create.CreateIncidentResponse;
 import ru.rickheadle.dddwitheda.domain.entity.Incident;
 import ru.rickheadle.dddwitheda.domain.entity.TechSupportExpert;
 import ru.rickheadle.dddwitheda.domain.event.IncidentAssignedToTechSupportExpertEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentCreatedEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentStatusUpdatedEvent;
-import ru.rickheadle.dddwitheda.domain.mapper.IncidentDataMapper;
 import ru.rickheadle.dddwitheda.domain.publisher.IncidentEventPublisher;
 import ru.rickheadle.dddwitheda.domain.repository.IncidentRepository;
 import ru.rickheadle.dddwitheda.domain.valueobject.Status;
@@ -48,7 +50,7 @@ public class IncidentServiceImpl implements IncidentService {
     incidentEventPublisher.publishIncidentCreatedEvent(
         new IncidentCreatedEvent(
             this,
-            incident,
+            incident.getTitle(),
             ZonedDateTime.now()
         )
     );
@@ -57,19 +59,21 @@ public class IncidentServiceImpl implements IncidentService {
   }
 
   @Override
-  public void updateIncidentStatus(UUID incidentId, Status newStatus) {
-    getIncidentById(incidentId)
-        .ifPresent(incident -> {
-          incident.setStatus(newStatus);
-          incidentRepository.save(incident);
-          incidentEventPublisher.publishIncidentStatusUpdatedEvent(
-              new IncidentStatusUpdatedEvent(
-                  this,
-                  incident,
-                  ZonedDateTime.now()
-              )
-          );
-        });
+  public UpdateIncidentStatusResponse updateIncidentStatus(UpdateIncidentStatusCommand command) {
+    Incident incident = getIncidentById(command.getIncidentId()).orElseThrow();
+    incident.setStatus(command.getStatus());
+    incidentRepository.save(incident);
+    incidentEventPublisher.publishIncidentStatusUpdatedEvent(
+        new IncidentStatusUpdatedEvent(
+            this,
+            incident,
+            ZonedDateTime.now()
+        )
+    );
+    return UpdateIncidentStatusResponse.builder()
+        .incidentId(incident.getId())
+        .response("Incident got a new Status")
+        .build();
   }
 
   @Override
@@ -79,7 +83,10 @@ public class IncidentServiceImpl implements IncidentService {
     incident.setTechSupportExpert(
         techSupportExpertService.findTechSupportExpertById(command.getTechSupportExpertId())
             .orElseThrow());
-    incident.setStatus(Status.ASSIGNED);
+    updateIncidentStatus(UpdateIncidentStatusCommand.builder()
+        .incidentId(command.getIncidentId())
+        .status(Status.ASSIGNED)
+        .build());
     incidentRepository.save(incident);
     incidentEventPublisher.publishIncidentAssignedToTechSupportExpertEvent(
         new IncidentAssignedToTechSupportExpertEvent(
@@ -89,7 +96,8 @@ public class IncidentServiceImpl implements IncidentService {
         )
     );
     return AssignIncidentToTechSupportExpertResponse.builder()
-        .incident(incident)
+        .incidentId(incident.getId())
+        .newTechSupportExpertId(incident.getTechSupportExpert().getId())
         .response("A new TechSupportExpert has been assigned to resolve the incident!")
         .build();
   }

@@ -1,4 +1,4 @@
-package ru.rickheadle.dddwitheda.domain.assign;
+package ru.rickheadle.dddwitheda.application.api.assign;
 
 import java.util.UUID;
 import lombok.AllArgsConstructor;

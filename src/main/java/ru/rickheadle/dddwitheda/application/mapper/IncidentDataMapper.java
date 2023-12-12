@@ -1,11 +1,11 @@
-package ru.rickheadle.dddwitheda.domain.mapper;
+package ru.rickheadle.dddwitheda.application.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentCommand;
+import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentResponse;
 import ru.rickheadle.dddwitheda.application.services.impl.ProductUserServiceImpl;
 import ru.rickheadle.dddwitheda.application.services.impl.TechSupportExpertServiceImpl;
-import ru.rickheadle.dddwitheda.domain.create.CreateIncidentCommand;
-import ru.rickheadle.dddwitheda.domain.create.CreateIncidentResponse;
 import ru.rickheadle.dddwitheda.domain.entity.Incident;
 import ru.rickheadle.dddwitheda.domain.valueobject.IncidentPriority;
 import ru.rickheadle.dddwitheda.domain.valueobject.Status;
@@ -43,7 +43,7 @@ public class IncidentDataMapper {
 
   public CreateIncidentResponse incidentToCreateIncidentResponse(Incident incident, String response) {
     return CreateIncidentResponse.builder()
-        .incident(incident)
+        .incidentId(incident.getId())
         .response(response)
         .build();
   }
