@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.rickheadle.dddwitheda.application.services.impl.IncidentServiceImpl;
+import ru.rickheadle.dddwitheda.domain.assign.AssignIncidentToTechSupportExpertCommand;
+import ru.rickheadle.dddwitheda.domain.assign.AssignIncidentToTechSupportExpertResponse;
 import ru.rickheadle.dddwitheda.domain.create.CreateIncidentCommand;
 import ru.rickheadle.dddwitheda.domain.create.CreateIncidentResponse;
 import ru.rickheadle.dddwitheda.domain.entity.Incident;
@@ -31,7 +33,14 @@ public class IncidentController {
     return ResponseEntity.ok(response);
   }
 
-
+  @PostMapping(value = "/assign", consumes = "application/json")
+  public ResponseEntity<AssignIncidentToTechSupportExpertResponse> assignIncident(
+      @RequestBody AssignIncidentToTechSupportExpertCommand command
+  ) {
+    AssignIncidentToTechSupportExpertResponse response =
+        incidentService.assignIncidentToTechSupportExpert(command);
+    return ResponseEntity.ok(response);
+  }
 
   @GetMapping
   public List<Incident> findAllIncidents() {

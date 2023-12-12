@@ -3,6 +3,8 @@ package ru.rickheadle.dddwitheda.application.services;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import ru.rickheadle.dddwitheda.domain.assign.AssignIncidentToTechSupportExpertCommand;
+import ru.rickheadle.dddwitheda.domain.assign.AssignIncidentToTechSupportExpertResponse;
 import ru.rickheadle.dddwitheda.domain.create.CreateIncidentCommand;
 import ru.rickheadle.dddwitheda.domain.create.CreateIncidentResponse;
 import ru.rickheadle.dddwitheda.domain.entity.Incident;
@@ -15,7 +17,8 @@ public interface IncidentService {
 
   void updateIncidentStatus(UUID incidentId, Status newStatus);
 
-  void assignIncidentToTechSupportExpert(UUID incidentId, TechSupportExpert techSupportExpert);
+  AssignIncidentToTechSupportExpertResponse assignIncidentToTechSupportExpert(
+      AssignIncidentToTechSupportExpertCommand command);
 
   Optional<Incident> getIncidentById(UUID incidentId);
 

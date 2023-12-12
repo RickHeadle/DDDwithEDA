@@ -14,8 +14,8 @@ import ru.rickheadle.dddwitheda.domain.event.RequestAssignedToTechSupportExpertE
 import ru.rickheadle.dddwitheda.domain.event.RequestCreatedEvent;
 import ru.rickheadle.dddwitheda.domain.event.RequestStatusUpdatedEvent;
 import ru.rickheadle.dddwitheda.domain.publisher.RequestEventPublisher;
+import ru.rickheadle.dddwitheda.domain.repository.RequestRepository;
 import ru.rickheadle.dddwitheda.domain.valueobject.Status;
-import ru.rickheadle.dddwitheda.infrastructure.repository.RequestRepository;
 
 @Service
 @Transactional

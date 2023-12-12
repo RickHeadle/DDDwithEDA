@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaAuditing
-@EnableJpaRepositories(value = "ru.rickheadle.dddwitheda.infrastructure.repository")
+@EnableJpaRepositories(value = "ru.rickheadle.dddwitheda.domain.repository")
 @SpringBootApplication
 public class DddWithEdaApplication {
 

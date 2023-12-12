@@ -1,4 +1,4 @@
-package ru.rickheadle.dddwitheda.infrastructure.repository;
+package ru.rickheadle.dddwitheda.domain.repository;
 
 import java.util.List;
 import java.util.UUID;

@@ -47,4 +47,5 @@ public class IncidentDataMapper {
         .response(response)
         .build();
   }
+
 }

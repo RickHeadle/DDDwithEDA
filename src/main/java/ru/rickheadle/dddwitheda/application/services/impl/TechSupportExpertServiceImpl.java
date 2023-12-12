@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.rickheadle.dddwitheda.application.services.TechSupportExpertService;
 import ru.rickheadle.dddwitheda.domain.entity.TechSupportExpert;
+import ru.rickheadle.dddwitheda.domain.repository.TechSupportExpertRepository;
 import ru.rickheadle.dddwitheda.domain.valueobject.SupportLevel;
-import ru.rickheadle.dddwitheda.infrastructure.repository.TechSupportExpertRepository;
 
 @Service
 @Transactional
