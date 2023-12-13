@@ -3,23 +3,28 @@ package ru.rickheadle.dddwitheda.application.services.impl;
 import jakarta.transaction.Transactional;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.rickheadle.dddwitheda.application.api.assign.AssignIncidentToTechSupportExpertCommand;
 import ru.rickheadle.dddwitheda.application.api.assign.AssignIncidentToTechSupportExpertResponse;
+import ru.rickheadle.dddwitheda.application.api.close.MarkIncidentAsClosedCommand;
+import ru.rickheadle.dddwitheda.application.api.close.MarkIncidentAsClosedResponse;
+import ru.rickheadle.dddwitheda.application.api.complete.MarkIncidentAsCompletedCommand;
+import ru.rickheadle.dddwitheda.application.api.complete.MarkIncidentAsCompletedResponse;
 import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentCommand;
 import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentResponse;
-import ru.rickheadle.dddwitheda.application.api.update.UpdateIncidentStatusCommand;
-import ru.rickheadle.dddwitheda.application.api.update.UpdateIncidentStatusResponse;
+import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressCommand;
+import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressResponse;
 import ru.rickheadle.dddwitheda.application.mapper.IncidentDataMapper;
 import ru.rickheadle.dddwitheda.application.services.IncidentService;
 import ru.rickheadle.dddwitheda.domain.entity.Incident;
 import ru.rickheadle.dddwitheda.domain.entity.TechSupportExpert;
 import ru.rickheadle.dddwitheda.domain.event.IncidentAssignedToTechSupportExpertEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentCreatedEvent;
-import ru.rickheadle.dddwitheda.domain.event.IncidentStatusUpdatedEvent;
+import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsClosedEvent;
+import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsCompletedEvent;
+import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsInProgressEvent;
 import ru.rickheadle.dddwitheda.domain.publisher.IncidentEventPublisher;
 import ru.rickheadle.dddwitheda.domain.repository.IncidentRepository;
 import ru.rickheadle.dddwitheda.domain.valueobject.Status;
@@ -59,39 +64,37 @@ public class IncidentServiceImpl implements IncidentService {
   }
 
   @Override
-  public UpdateIncidentStatusResponse updateIncidentStatus(UpdateIncidentStatusCommand command) {
-    Incident incident = getIncidentById(command.getIncidentId()).orElseThrow();
-    incident.setStatus(command.getStatus());
+  public MarkIncidentAsInProgressResponse markIncidentAsInProgress(
+      MarkIncidentAsInProgressCommand command) {
+    Incident incident = findIncidentById(command.getIncidentId());
+    incident.setStatus(Status.IN_PROGRESS);
     incidentRepository.save(incident);
-    incidentEventPublisher.publishIncidentStatusUpdatedEvent(
-        new IncidentStatusUpdatedEvent(
+    incidentEventPublisher.publishIncidentMarkedAsInProgressEvent(
+        new IncidentMarkedAsInProgressEvent(
             this,
-            incident,
+            Status.IN_PROGRESS,
             ZonedDateTime.now()
         )
     );
-    return UpdateIncidentStatusResponse.builder()
+    return MarkIncidentAsInProgressResponse.builder()
         .incidentId(incident.getId())
-        .response("Incident got a new Status")
+        .response("Incident got a new Status: " + Status.IN_PROGRESS.getStatusName())
         .build();
   }
 
   @Override
   public AssignIncidentToTechSupportExpertResponse assignIncidentToTechSupportExpert(
       AssignIncidentToTechSupportExpertCommand command) {
-    Incident incident = getIncidentById(command.getIncidentId()).orElseThrow();
+    Incident incident = findIncidentById(command.getIncidentId());
     incident.setTechSupportExpert(
         techSupportExpertService.findTechSupportExpertById(command.getTechSupportExpertId())
             .orElseThrow());
-    updateIncidentStatus(UpdateIncidentStatusCommand.builder()
-        .incidentId(command.getIncidentId())
-        .status(Status.ASSIGNED)
-        .build());
+    //TODO: add publishEvent for setting Assign Status
     incidentRepository.save(incident);
     incidentEventPublisher.publishIncidentAssignedToTechSupportExpertEvent(
         new IncidentAssignedToTechSupportExpertEvent(
             this,
-            incident,
+            incident.getTechSupportExpert(),
             ZonedDateTime.now()
         )
     );
@@ -103,8 +106,45 @@ public class IncidentServiceImpl implements IncidentService {
   }
 
   @Override
-  public Optional<Incident> getIncidentById(UUID incidentId) {
-    return incidentRepository.findById(incidentId);
+  public MarkIncidentAsCompletedResponse markIncidentAsCompleted(
+      MarkIncidentAsCompletedCommand command) {
+    Incident incident = findIncidentById(command.getIncidentId());
+    incident.setStatus(Status.COMPLETED);
+    incidentRepository.save(incident);
+    incidentEventPublisher.publishIncidentMarkedAsCompleted(
+        new IncidentMarkedAsCompletedEvent(
+            this,
+            Status.COMPLETED,
+            ZonedDateTime.now()
+        )
+    );
+    return MarkIncidentAsCompletedResponse.builder()
+        .incidentId(incident.getId())
+        .response("Incident got a new Status: " + Status.COMPLETED.getStatusName())
+        .build();
+  }
+
+  @Override
+  public MarkIncidentAsClosedResponse markIncidentAsClosed(MarkIncidentAsClosedCommand command) {
+    Incident incident = findIncidentById(command.getIncidentId());
+    incident.setStatus(Status.CLOSED);
+    incidentRepository.save(incident);
+    incidentEventPublisher.publishIncidentMarkedAsClosed(
+        new IncidentMarkedAsClosedEvent(
+            this,
+            Status.CLOSED,
+            ZonedDateTime.now()
+        )
+    );
+    return MarkIncidentAsClosedResponse.builder()
+        .incidentId(incident.getId())
+        .response("Incident got a new Status: " + Status.CLOSED.getStatusName())
+        .build();
+  }
+
+  @Override
+  public Incident findIncidentById(UUID incidentId) {
+    return incidentRepository.findById(incidentId).orElseThrow();
   }
 
   @Override

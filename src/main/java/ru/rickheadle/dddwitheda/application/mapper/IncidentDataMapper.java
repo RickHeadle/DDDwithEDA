@@ -10,6 +10,10 @@ import ru.rickheadle.dddwitheda.domain.entity.Incident;
 import ru.rickheadle.dddwitheda.domain.valueobject.IncidentPriority;
 import ru.rickheadle.dddwitheda.domain.valueobject.Status;
 
+/**
+ * Преобразование CreateIncidentCommand в Incident, а также
+ * преобразование Incident в CreateIncidentResponse.
+ */
 @Component
 public class IncidentDataMapper {
 

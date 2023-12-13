@@ -12,8 +12,8 @@ import ru.rickheadle.dddwitheda.application.api.assign.AssignIncidentToTechSuppo
 import ru.rickheadle.dddwitheda.application.api.assign.AssignIncidentToTechSupportExpertResponse;
 import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentCommand;
 import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentResponse;
-import ru.rickheadle.dddwitheda.application.api.update.UpdateIncidentStatusCommand;
-import ru.rickheadle.dddwitheda.application.api.update.UpdateIncidentStatusResponse;
+import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressCommand;
+import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressResponse;
 import ru.rickheadle.dddwitheda.application.services.impl.IncidentServiceImpl;
 import ru.rickheadle.dddwitheda.domain.entity.Incident;
 
@@ -44,12 +44,12 @@ public class IncidentController {
     return ResponseEntity.ok(response);
   }
 
-  @PostMapping(value = "/updateStatus", consumes = "application/json")
-  public ResponseEntity<UpdateIncidentStatusResponse> updateIncidentStatus(
-      @RequestBody UpdateIncidentStatusCommand command
+  @PostMapping(value = "/markAsInProgress", consumes = "application/json")
+  public ResponseEntity<MarkIncidentAsInProgressResponse> markIncidentAsInProgress(
+      @RequestBody MarkIncidentAsInProgressCommand command
   ) {
-    UpdateIncidentStatusResponse response =
-        incidentService.updateIncidentStatus(command);
+    MarkIncidentAsInProgressResponse response =
+        incidentService.markIncidentAsInProgress(command);
     return ResponseEntity.ok(response);
   }
 

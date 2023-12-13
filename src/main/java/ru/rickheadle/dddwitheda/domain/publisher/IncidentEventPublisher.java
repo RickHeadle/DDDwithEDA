@@ -6,7 +6,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import ru.rickheadle.dddwitheda.domain.event.IncidentAssignedToTechSupportExpertEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentCreatedEvent;
-import ru.rickheadle.dddwitheda.domain.event.IncidentStatusUpdatedEvent;
+import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsClosedEvent;
+import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsCompletedEvent;
+import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsInProgressEvent;
 
 @Slf4j
 @Component
@@ -30,8 +32,18 @@ public class IncidentEventPublisher {
     applicationEventPublisher.publishEvent(event);
   }
 
-  public void publishIncidentStatusUpdatedEvent(IncidentStatusUpdatedEvent event) {
+  public void publishIncidentMarkedAsInProgressEvent(IncidentMarkedAsInProgressEvent event) {
     log.info("Publishing the IncidentStatusUpdatedEvent: " + event.toString());
+    applicationEventPublisher.publishEvent(event);
+  }
+
+  public void publishIncidentMarkedAsCompleted(IncidentMarkedAsCompletedEvent event) {
+    log.info("Publishing the IncidentMarkedAsCompletedEvent: " + event.toString());
+    applicationEventPublisher.publishEvent(event);
+  }
+
+  public void publishIncidentMarkedAsClosed(IncidentMarkedAsClosedEvent event) {
+    log.info("Publishing the IncidentMarkedAsClosedEvent: " + event.toString());
     applicationEventPublisher.publishEvent(event);
   }
 }
