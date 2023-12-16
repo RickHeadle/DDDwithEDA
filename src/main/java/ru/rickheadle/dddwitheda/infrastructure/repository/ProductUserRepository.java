@@ -1,9 +1,11 @@
-package ru.rickheadle.dddwitheda.domain.repository;
+package ru.rickheadle.dddwitheda.infrastructure.repository;
 
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.rickheadle.dddwitheda.domain.entity.ProductUser;
+import org.springframework.stereotype.Repository;
+import ru.rickheadle.dddwitheda.domain.model.ProductUser;
 
+@Repository
 public interface ProductUserRepository extends JpaRepository<ProductUser, UUID> {
 
   ProductUser findByLastNameAndFirstNameAndMiddleName(

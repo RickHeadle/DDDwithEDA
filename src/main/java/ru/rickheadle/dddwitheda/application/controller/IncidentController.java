@@ -10,12 +10,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.rickheadle.dddwitheda.application.api.assign.AssignIncidentToTechSupportExpertCommand;
 import ru.rickheadle.dddwitheda.application.api.assign.AssignIncidentToTechSupportExpertResponse;
+import ru.rickheadle.dddwitheda.application.api.close.MarkIncidentAsClosedCommand;
+import ru.rickheadle.dddwitheda.application.api.close.MarkIncidentAsClosedResponse;
+import ru.rickheadle.dddwitheda.application.api.complete.MarkIncidentAsCompletedCommand;
+import ru.rickheadle.dddwitheda.application.api.complete.MarkIncidentAsCompletedResponse;
 import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentCommand;
 import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentResponse;
 import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressCommand;
 import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressResponse;
+import ru.rickheadle.dddwitheda.application.api.info.MarkIncidentAsInformationNeededCommand;
+import ru.rickheadle.dddwitheda.application.api.info.MarkIncidentAsInformationNeededResponse;
 import ru.rickheadle.dddwitheda.application.services.impl.IncidentServiceImpl;
-import ru.rickheadle.dddwitheda.domain.entity.Incident;
+import ru.rickheadle.dddwitheda.domain.model.Incident;
 
 @RestController
 @RequestMapping(value = "/incidents")
@@ -50,6 +56,33 @@ public class IncidentController {
   ) {
     MarkIncidentAsInProgressResponse response =
         incidentService.markIncidentAsInProgress(command);
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping(value = "/markAsCompleted", consumes = "application/json")
+  public ResponseEntity<MarkIncidentAsCompletedResponse> markIncidentAsCompleted(
+      @RequestBody MarkIncidentAsCompletedCommand command
+  ) {
+    MarkIncidentAsCompletedResponse response =
+        incidentService.markIncidentAsCompleted(command);
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping(value = "/markAsClosed", consumes = "application/json")
+  public ResponseEntity<MarkIncidentAsClosedResponse> markIncidentAsClosed(
+      @RequestBody MarkIncidentAsClosedCommand command
+  ) {
+    MarkIncidentAsClosedResponse response =
+        incidentService.markIncidentAsClosed(command);
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping(value = "/markAsInfoNeeded", consumes = "application/json")
+  public ResponseEntity<MarkIncidentAsInformationNeededResponse> markIncidentAsInformationNeeded(
+    @RequestBody MarkIncidentAsInformationNeededCommand command
+  ) {
+    MarkIncidentAsInformationNeededResponse response =
+        incidentService.markIncidentAsInformationNeeded(command);
     return ResponseEntity.ok(response);
   }
 

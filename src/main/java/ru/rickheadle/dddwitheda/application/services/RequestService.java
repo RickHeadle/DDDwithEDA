@@ -3,9 +3,9 @@ package ru.rickheadle.dddwitheda.application.services;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import ru.rickheadle.dddwitheda.domain.entity.Request;
-import ru.rickheadle.dddwitheda.domain.entity.TechSupportExpert;
-import ru.rickheadle.dddwitheda.domain.valueobject.Status;
+import ru.rickheadle.dddwitheda.domain.model.Request;
+import ru.rickheadle.dddwitheda.domain.model.TechSupportExpert;
+import ru.rickheadle.dddwitheda.domain.model.valueobject.Status;
 
 public interface RequestService {
 

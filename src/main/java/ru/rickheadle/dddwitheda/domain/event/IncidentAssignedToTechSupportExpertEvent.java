@@ -3,7 +3,7 @@ package ru.rickheadle.dddwitheda.domain.event;
 import java.time.ZonedDateTime;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
-import ru.rickheadle.dddwitheda.domain.entity.TechSupportExpert;
+import ru.rickheadle.dddwitheda.domain.model.TechSupportExpert;
 
 @Getter
 public class IncidentAssignedToTechSupportExpertEvent extends ApplicationEvent {

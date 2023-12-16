@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.rickheadle.dddwitheda.application.services.impl.RequestServiceImpl;
-import ru.rickheadle.dddwitheda.domain.entity.Request;
+import ru.rickheadle.dddwitheda.domain.model.Request;
 
 @RestController
 @RequestMapping(value = "/requests")

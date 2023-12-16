@@ -1,4 +1,4 @@
-package ru.rickheadle.dddwitheda.domain.entity;
+package ru.rickheadle.dddwitheda.domain.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,7 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.rickheadle.dddwitheda.domain.valueobject.SupportLevel;
+import ru.rickheadle.dddwitheda.domain.model.valueobject.SupportLevel;
 
 @Entity
 @Getter

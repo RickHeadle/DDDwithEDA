@@ -1,4 +1,4 @@
-package ru.rickheadle.dddwitheda.domain.valueobject;
+package ru.rickheadle.dddwitheda.domain.model.valueobject;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -9,6 +9,8 @@ import ru.rickheadle.dddwitheda.domain.event.IncidentCreatedEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsClosedEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsCompletedEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsInProgressEvent;
+import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsInformationNeededEvent;
+import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsRejectedEvent;
 
 @Slf4j
 @Component
@@ -44,6 +46,17 @@ public class IncidentEventPublisher {
 
   public void publishIncidentMarkedAsClosed(IncidentMarkedAsClosedEvent event) {
     log.info("Publishing the IncidentMarkedAsClosedEvent: " + event.toString());
+    applicationEventPublisher.publishEvent(event);
+  }
+
+  public void publishIncidentMarkedAsRejected(IncidentMarkedAsRejectedEvent event) {
+    log.info("Publishing the IncidentMarkedAsRejectedEvent: " + event.toString());
+    applicationEventPublisher.publishEvent(event);
+  }
+
+  public void publishIncidentMarkedAsInformationNeeded(
+      IncidentMarkedAsInformationNeededEvent event) {
+    log.info("Publishing the IncidentMarkedAsInformationNeededEvent: " + event.toString());
     applicationEventPublisher.publishEvent(event);
   }
 }

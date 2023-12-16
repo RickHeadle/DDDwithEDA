@@ -4,8 +4,8 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import ru.rickheadle.dddwitheda.domain.valueobject.IncidentEmergency;
-import ru.rickheadle.dddwitheda.domain.valueobject.IncidentInfluence;
+import ru.rickheadle.dddwitheda.domain.model.valueobject.IncidentEmergency;
+import ru.rickheadle.dddwitheda.domain.model.valueobject.IncidentInfluence;
 
 @Getter
 @Builder

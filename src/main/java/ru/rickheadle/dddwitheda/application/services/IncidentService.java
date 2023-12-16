@@ -12,9 +12,13 @@ import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentCommand;
 import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentResponse;
 import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressCommand;
 import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressResponse;
-import ru.rickheadle.dddwitheda.domain.entity.Incident;
-import ru.rickheadle.dddwitheda.domain.entity.TechSupportExpert;
-import ru.rickheadle.dddwitheda.domain.valueobject.Status;
+import ru.rickheadle.dddwitheda.application.api.info.MarkIncidentAsInformationNeededCommand;
+import ru.rickheadle.dddwitheda.application.api.info.MarkIncidentAsInformationNeededResponse;
+import ru.rickheadle.dddwitheda.application.api.reject.MarkIncidentAsRejectedCommand;
+import ru.rickheadle.dddwitheda.application.api.reject.MarkIncidentAsRejectedResponse;
+import ru.rickheadle.dddwitheda.domain.model.Incident;
+import ru.rickheadle.dddwitheda.domain.model.TechSupportExpert;
+import ru.rickheadle.dddwitheda.domain.model.valueobject.Status;
 
 public interface IncidentService {
 
@@ -28,6 +32,11 @@ public interface IncidentService {
   MarkIncidentAsCompletedResponse markIncidentAsCompleted(MarkIncidentAsCompletedCommand command);
 
   MarkIncidentAsClosedResponse markIncidentAsClosed(MarkIncidentAsClosedCommand command);
+
+  MarkIncidentAsRejectedResponse markIncidentAsRejected(MarkIncidentAsRejectedCommand command);
+
+  MarkIncidentAsInformationNeededResponse markIncidentAsInformationNeeded(
+      MarkIncidentAsInformationNeededCommand command);
 
   Incident findIncidentById(UUID incidentId);
 

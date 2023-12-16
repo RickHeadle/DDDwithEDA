@@ -1,4 +1,4 @@
-package ru.rickheadle.dddwitheda.domain.entity;
+package ru.rickheadle.dddwitheda.domain.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

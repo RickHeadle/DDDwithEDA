@@ -16,18 +16,24 @@ import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentCommand;
 import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentResponse;
 import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressCommand;
 import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressResponse;
+import ru.rickheadle.dddwitheda.application.api.info.MarkIncidentAsInformationNeededCommand;
+import ru.rickheadle.dddwitheda.application.api.info.MarkIncidentAsInformationNeededResponse;
+import ru.rickheadle.dddwitheda.application.api.reject.MarkIncidentAsRejectedCommand;
+import ru.rickheadle.dddwitheda.application.api.reject.MarkIncidentAsRejectedResponse;
 import ru.rickheadle.dddwitheda.application.mapper.IncidentDataMapper;
 import ru.rickheadle.dddwitheda.application.services.IncidentService;
-import ru.rickheadle.dddwitheda.domain.entity.Incident;
-import ru.rickheadle.dddwitheda.domain.entity.TechSupportExpert;
 import ru.rickheadle.dddwitheda.domain.event.IncidentAssignedToTechSupportExpertEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentCreatedEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsClosedEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsCompletedEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsInProgressEvent;
+import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsInformationNeededEvent;
+import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsRejectedEvent;
+import ru.rickheadle.dddwitheda.domain.model.Incident;
+import ru.rickheadle.dddwitheda.domain.model.TechSupportExpert;
+import ru.rickheadle.dddwitheda.domain.model.valueobject.Status;
 import ru.rickheadle.dddwitheda.domain.publisher.IncidentEventPublisher;
-import ru.rickheadle.dddwitheda.domain.repository.IncidentRepository;
-import ru.rickheadle.dddwitheda.domain.valueobject.Status;
+import ru.rickheadle.dddwitheda.infrastructure.repository.IncidentRepository;
 
 @Service
 @Transactional
@@ -139,6 +145,43 @@ public class IncidentServiceImpl implements IncidentService {
     return MarkIncidentAsClosedResponse.builder()
         .incidentId(incident.getId())
         .response("Incident got a new Status: " + Status.CLOSED.getStatusName())
+        .build();
+  }
+
+  @Override
+  public MarkIncidentAsRejectedResponse markIncidentAsRejected(MarkIncidentAsRejectedCommand command) {
+    Incident incident = findIncidentById(command.getIncidentId());
+    incident.setStatus(Status.REJECTED_BY_USER);
+    incidentRepository.save(incident);
+    incidentEventPublisher.publishIncidentMarkedAsRejected(
+        new IncidentMarkedAsRejectedEvent(
+            this,
+            Status.REJECTED_BY_USER,
+            ZonedDateTime.now()
+        )
+    );
+    return MarkIncidentAsRejectedResponse.builder()
+        .incidentId(incident.getId())
+        .response("Incident got a new Status: " + Status.REJECTED_BY_USER.getStatusName())
+        .build();
+  }
+
+  @Override
+  public MarkIncidentAsInformationNeededResponse markIncidentAsInformationNeeded(
+      MarkIncidentAsInformationNeededCommand command) {
+    Incident incident = findIncidentById(command.getIncidentId());
+    incident.setStatus(Status.INFORMATION_NEEDED);
+    incidentRepository.save(incident);
+    incidentEventPublisher.publishIncidentMarkedAsInformationNeeded(
+        new IncidentMarkedAsInformationNeededEvent(
+            this,
+            Status.INFORMATION_NEEDED,
+            ZonedDateTime.now()
+        )
+    );
+    return MarkIncidentAsInformationNeededResponse.builder()
+        .incidentId(incident.getId())
+        .response("Incident got a new Status: " + Status.INFORMATION_NEEDED.getStatusName())
         .build();
   }
 

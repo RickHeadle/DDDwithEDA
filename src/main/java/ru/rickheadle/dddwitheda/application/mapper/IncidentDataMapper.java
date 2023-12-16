@@ -6,9 +6,9 @@ import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentCommand;
 import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentResponse;
 import ru.rickheadle.dddwitheda.application.services.impl.ProductUserServiceImpl;
 import ru.rickheadle.dddwitheda.application.services.impl.TechSupportExpertServiceImpl;
-import ru.rickheadle.dddwitheda.domain.entity.Incident;
-import ru.rickheadle.dddwitheda.domain.valueobject.IncidentPriority;
-import ru.rickheadle.dddwitheda.domain.valueobject.Status;
+import ru.rickheadle.dddwitheda.domain.model.Incident;
+import ru.rickheadle.dddwitheda.domain.model.valueobject.IncidentPriority;
+import ru.rickheadle.dddwitheda.domain.model.valueobject.Status;
 
 /**
  * Преобразование CreateIncidentCommand в Incident, а также

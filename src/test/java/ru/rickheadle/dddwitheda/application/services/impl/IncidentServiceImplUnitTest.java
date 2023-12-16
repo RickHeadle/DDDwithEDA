@@ -12,9 +12,9 @@ import ru.rickheadle.dddwitheda.application.api.close.MarkIncidentAsClosedComman
 import ru.rickheadle.dddwitheda.application.api.complete.MarkIncidentAsCompletedCommand;
 import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentCommand;
 import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressCommand;
-import ru.rickheadle.dddwitheda.domain.valueobject.IncidentEmergency;
-import ru.rickheadle.dddwitheda.domain.valueobject.IncidentInfluence;
-import ru.rickheadle.dddwitheda.domain.valueobject.Status;
+import ru.rickheadle.dddwitheda.domain.model.valueobject.IncidentEmergency;
+import ru.rickheadle.dddwitheda.domain.model.valueobject.IncidentInfluence;
+import ru.rickheadle.dddwitheda.domain.model.valueobject.Status;
 
 @SpringBootTest
 class IncidentServiceImplUnitTest {
