@@ -16,6 +16,8 @@ import ru.rickheadle.dddwitheda.application.api.complete.MarkIncidentAsCompleted
 import ru.rickheadle.dddwitheda.application.api.complete.MarkIncidentAsCompletedResponse;
 import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentCommand;
 import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentResponse;
+import ru.rickheadle.dddwitheda.application.api.external.MarkIncidentAsOnExternalProcessingCommand;
+import ru.rickheadle.dddwitheda.application.api.external.MarkIncidentAsOnExternalProcessingResponse;
 import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressCommand;
 import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressResponse;
 import ru.rickheadle.dddwitheda.application.api.info.MarkIncidentAsInformationNeededCommand;
@@ -83,6 +85,15 @@ public class IncidentController {
   ) {
     MarkIncidentAsInformationNeededResponse response =
         incidentService.markIncidentAsInformationNeeded(command);
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping(value = "/markAsExternal", consumes = "application/json")
+  public ResponseEntity<MarkIncidentAsOnExternalProcessingResponse> markIncidentAsOnExternalProcessing(
+    @RequestBody MarkIncidentAsOnExternalProcessingCommand command
+  ) {
+    MarkIncidentAsOnExternalProcessingResponse response =
+        incidentService.markIncidentAsOnExternalProcessing(command);
     return ResponseEntity.ok(response);
   }
 

@@ -14,6 +14,8 @@ import ru.rickheadle.dddwitheda.application.api.complete.MarkIncidentAsCompleted
 import ru.rickheadle.dddwitheda.application.api.complete.MarkIncidentAsCompletedResponse;
 import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentCommand;
 import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentResponse;
+import ru.rickheadle.dddwitheda.application.api.external.MarkIncidentAsOnExternalProcessingCommand;
+import ru.rickheadle.dddwitheda.application.api.external.MarkIncidentAsOnExternalProcessingResponse;
 import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressCommand;
 import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressResponse;
 import ru.rickheadle.dddwitheda.application.api.info.MarkIncidentAsInformationNeededCommand;
@@ -28,6 +30,7 @@ import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsClosedEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsCompletedEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsInProgressEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsInformationNeededEvent;
+import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsOnExternalProcessingEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsRejectedEvent;
 import ru.rickheadle.dddwitheda.domain.model.Incident;
 import ru.rickheadle.dddwitheda.domain.model.TechSupportExpert;
@@ -182,6 +185,27 @@ public class IncidentServiceImpl implements IncidentService {
     return MarkIncidentAsInformationNeededResponse.builder()
         .incidentId(incident.getId())
         .response("Incident got a new Status: " + Status.INFORMATION_NEEDED.getStatusName())
+        .build();
+  }
+
+  @Override
+  public MarkIncidentAsOnExternalProcessingResponse markIncidentAsOnExternalProcessing(
+      MarkIncidentAsOnExternalProcessingCommand command) {
+    Incident incident = findIncidentById(command.getIncidentId());
+    Status oldStatus = incident.getStatus();
+    incident.setStatus(Status.EXTERNAL_PROCESSING);
+    incidentRepository.save(incident);
+    incidentEventPublisher.publishIncidentMarkedAsOnExternalProcessing(
+        new IncidentMarkedAsOnExternalProcessingEvent(
+            this,
+            oldStatus,
+            Status.EXTERNAL_PROCESSING,
+            ZonedDateTime.now()
+        )
+    );
+    return MarkIncidentAsOnExternalProcessingResponse.builder()
+        .incidentId(incident.getId())
+        .response("Incident got a new Status: " + Status.EXTERNAL_PROCESSING.getStatusName())
         .build();
   }
 

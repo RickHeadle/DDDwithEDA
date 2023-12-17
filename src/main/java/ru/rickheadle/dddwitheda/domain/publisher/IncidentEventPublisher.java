@@ -10,6 +10,7 @@ import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsClosedEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsCompletedEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsInProgressEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsInformationNeededEvent;
+import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsOnExternalProcessingEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsRejectedEvent;
 
 @Slf4j
@@ -59,4 +60,11 @@ public class IncidentEventPublisher {
     log.info("Publishing the IncidentMarkedAsInformationNeededEvent: " + event.toString());
     applicationEventPublisher.publishEvent(event);
   }
+
+  public void publishIncidentMarkedAsOnExternalProcessing(
+      IncidentMarkedAsOnExternalProcessingEvent event) {
+    log.info("Publishing the IncidentMarkedAsOnExternalProcessingEvent: " + event.toString());
+    applicationEventPublisher.publishEvent(event);
+  }
+
 }

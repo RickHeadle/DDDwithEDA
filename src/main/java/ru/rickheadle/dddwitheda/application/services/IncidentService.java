@@ -10,6 +10,8 @@ import ru.rickheadle.dddwitheda.application.api.complete.MarkIncidentAsCompleted
 import ru.rickheadle.dddwitheda.application.api.complete.MarkIncidentAsCompletedResponse;
 import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentCommand;
 import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentResponse;
+import ru.rickheadle.dddwitheda.application.api.external.MarkIncidentAsOnExternalProcessingCommand;
+import ru.rickheadle.dddwitheda.application.api.external.MarkIncidentAsOnExternalProcessingResponse;
 import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressCommand;
 import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressResponse;
 import ru.rickheadle.dddwitheda.application.api.info.MarkIncidentAsInformationNeededCommand;
@@ -37,6 +39,9 @@ public interface IncidentService {
 
   MarkIncidentAsInformationNeededResponse markIncidentAsInformationNeeded(
       MarkIncidentAsInformationNeededCommand command);
+
+  MarkIncidentAsOnExternalProcessingResponse markIncidentAsOnExternalProcessing(
+    MarkIncidentAsOnExternalProcessingCommand command);
 
   Incident findIncidentById(UUID incidentId);
 
