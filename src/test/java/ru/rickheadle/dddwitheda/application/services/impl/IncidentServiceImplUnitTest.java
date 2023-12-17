@@ -11,7 +11,10 @@ import ru.rickheadle.dddwitheda.application.api.assign.AssignIncidentToTechSuppo
 import ru.rickheadle.dddwitheda.application.api.close.MarkIncidentAsClosedCommand;
 import ru.rickheadle.dddwitheda.application.api.complete.MarkIncidentAsCompletedCommand;
 import ru.rickheadle.dddwitheda.application.api.create.CreateIncidentCommand;
+import ru.rickheadle.dddwitheda.application.api.external.MarkIncidentAsOnExternalProcessingCommand;
 import ru.rickheadle.dddwitheda.application.api.inProgress.MarkIncidentAsInProgressCommand;
+import ru.rickheadle.dddwitheda.application.api.info.MarkIncidentAsInformationNeededCommand;
+import ru.rickheadle.dddwitheda.application.api.reject.MarkIncidentAsRejectedCommand;
 import ru.rickheadle.dddwitheda.domain.model.valueobject.IncidentEmergency;
 import ru.rickheadle.dddwitheda.domain.model.valueobject.IncidentInfluence;
 import ru.rickheadle.dddwitheda.domain.model.valueobject.Status;
@@ -30,6 +33,9 @@ class IncidentServiceImplUnitTest {
   private static AssignIncidentToTechSupportExpertCommand assignIncidentToTechSupportExpertCommand;
   private static MarkIncidentAsCompletedCommand markIncidentAsCompletedCommand;
   private static MarkIncidentAsClosedCommand markIncidentAsClosedCommand;
+  private static MarkIncidentAsRejectedCommand markIncidentAsRejectedCommand;
+  private static MarkIncidentAsInformationNeededCommand markIncidentAsInformationNeededCommand;
+  private static MarkIncidentAsOnExternalProcessingCommand markIncidentAsOnExternalProcessingCommand;
 
   @BeforeAll
   static void beforeAll() {
@@ -52,6 +58,15 @@ class IncidentServiceImplUnitTest {
         .incidentId(UUID.fromString("7b4d03ef-4a2f-4ab7-9e32-6a0a366bcfe6"))
         .build();
     markIncidentAsClosedCommand = MarkIncidentAsClosedCommand.builder()
+        .incidentId(UUID.fromString("7b4d03ef-4a2f-4ab7-9e32-6a0a366bcfe6"))
+        .build();
+    markIncidentAsRejectedCommand = MarkIncidentAsRejectedCommand.builder()
+        .incidentId(UUID.fromString("7b4d03ef-4a2f-4ab7-9e32-6a0a366bcfe6"))
+        .build();
+    markIncidentAsInformationNeededCommand = MarkIncidentAsInformationNeededCommand.builder()
+        .incidentId(UUID.fromString("7b4d03ef-4a2f-4ab7-9e32-6a0a366bcfe6"))
+        .build();
+    markIncidentAsOnExternalProcessingCommand = MarkIncidentAsOnExternalProcessingCommand.builder()
         .incidentId(UUID.fromString("7b4d03ef-4a2f-4ab7-9e32-6a0a366bcfe6"))
         .build();
   }
@@ -103,6 +118,33 @@ class IncidentServiceImplUnitTest {
         () -> incidentService.markIncidentAsClosed(markIncidentAsClosedCommand));
     Assertions.assertEquals(Status.CLOSED, incidentService.findIncidentById(
         markIncidentAsClosedCommand.getIncidentId()).getStatus());
+  }
+
+  @Test
+  @DisplayName("Проверка на установку статуса REJECTED_BY_USER")
+  void whenMarkIncidentAsRejectedMethodCalled_thenIncidentStatusIsRejected() {
+    Assertions.assertDoesNotThrow(
+        () -> incidentService.markIncidentAsRejected(markIncidentAsRejectedCommand));
+    Assertions.assertEquals(Status.REJECTED_BY_USER, incidentService.findIncidentById(
+        markIncidentAsRejectedCommand.getIncidentId()).getStatus());
+  }
+
+  @Test
+  @DisplayName("Проверка на установку статуса INFORMATION_NEEDED")
+  void whenMarkIncidentAsInformationNeededMethodCalled_thenIncidentStatusIsInformationNeeded() {
+    Assertions.assertDoesNotThrow(
+        () -> incidentService.markIncidentAsInformationNeeded(markIncidentAsInformationNeededCommand));
+    Assertions.assertEquals(Status.INFORMATION_NEEDED, incidentService.findIncidentById(
+        markIncidentAsInformationNeededCommand.getIncidentId()).getStatus());
+  }
+
+  @Test
+  @DisplayName("Проверка на установку статуса EXTERNAL_PROCESSING")
+  void whenMarkIncidentAsOnExternalProcessingMethodCalled_thenIncidentStatusIsOnExternalProcessing() {
+    Assertions.assertDoesNotThrow(
+        () -> incidentService.markIncidentAsOnExternalProcessing(markIncidentAsOnExternalProcessingCommand));
+    Assertions.assertEquals(Status.EXTERNAL_PROCESSING, incidentService.findIncidentById(
+        markIncidentAsOnExternalProcessingCommand.getIncidentId()).getStatus());
   }
 
 }
