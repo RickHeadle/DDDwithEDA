@@ -83,7 +83,6 @@ class IncidentServiceUnitTest {
   void whenMarkIncidentAsInProgressMethodCalled_thenIncidentStatusIsInProgress() {
     Assertions.assertDoesNotThrow(
         () -> incidentService.markIncidentAsInProgress(markIncidentAsInProgressCommand));
-    //TODO: избавиться от зависимости от данных с указанным UUID в data.sql
     Assertions.assertEquals(Status.IN_PROGRESS, incidentService.findIncidentById(
         markIncidentAsInProgressCommand.getIncidentId()).getStatus());
   }
