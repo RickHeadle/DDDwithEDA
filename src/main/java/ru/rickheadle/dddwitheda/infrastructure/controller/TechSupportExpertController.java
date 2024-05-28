@@ -1,4 +1,4 @@
-package ru.rickheadle.dddwitheda.application.controller;
+package ru.rickheadle.dddwitheda.infrastructure.controller;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;

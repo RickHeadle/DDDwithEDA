@@ -23,7 +23,6 @@ import ru.rickheadle.dddwitheda.application.api.info.MarkIncidentAsInformationNe
 import ru.rickheadle.dddwitheda.application.api.reject.MarkIncidentAsRejectedCommand;
 import ru.rickheadle.dddwitheda.application.api.reject.MarkIncidentAsRejectedResponse;
 import ru.rickheadle.dddwitheda.application.mapper.IncidentDataMapper;
-import ru.rickheadle.dddwitheda.application.services.IncidentService;
 import ru.rickheadle.dddwitheda.domain.event.IncidentAssignedToTechSupportExpertEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentCreatedEvent;
 import ru.rickheadle.dddwitheda.domain.event.IncidentMarkedAsClosedEvent;
@@ -36,9 +35,10 @@ import ru.rickheadle.dddwitheda.domain.model.Incident;
 import ru.rickheadle.dddwitheda.domain.model.TechSupportExpert;
 import ru.rickheadle.dddwitheda.domain.model.valueobject.Status;
 import ru.rickheadle.dddwitheda.domain.publisher.IncidentEventPublisher;
+import ru.rickheadle.dddwitheda.domain.services.IncidentService;
 import ru.rickheadle.dddwitheda.infrastructure.repository.IncidentRepository;
 
-@Service
+@Service  //@Named
 @Transactional
 public class IncidentServiceImpl implements IncidentService {
 
@@ -81,7 +81,6 @@ public class IncidentServiceImpl implements IncidentService {
     incidentEventPublisher.publishIncidentMarkedAsInProgressEvent(
         new IncidentMarkedAsInProgressEvent(
             this,
-            Status.IN_PROGRESS,
             ZonedDateTime.now()
         )
     );
@@ -123,7 +122,6 @@ public class IncidentServiceImpl implements IncidentService {
     incidentEventPublisher.publishIncidentMarkedAsCompleted(
         new IncidentMarkedAsCompletedEvent(
             this,
-            Status.COMPLETED,
             ZonedDateTime.now()
         )
     );
@@ -141,7 +139,6 @@ public class IncidentServiceImpl implements IncidentService {
     incidentEventPublisher.publishIncidentMarkedAsClosed(
         new IncidentMarkedAsClosedEvent(
             this,
-            Status.CLOSED,
             ZonedDateTime.now()
         )
     );
@@ -159,7 +156,6 @@ public class IncidentServiceImpl implements IncidentService {
     incidentEventPublisher.publishIncidentMarkedAsRejected(
         new IncidentMarkedAsRejectedEvent(
             this,
-            Status.REJECTED_BY_USER,
             ZonedDateTime.now()
         )
     );
@@ -178,7 +174,6 @@ public class IncidentServiceImpl implements IncidentService {
     incidentEventPublisher.publishIncidentMarkedAsInformationNeeded(
         new IncidentMarkedAsInformationNeededEvent(
             this,
-            Status.INFORMATION_NEEDED,
             ZonedDateTime.now()
         )
     );
@@ -192,14 +187,11 @@ public class IncidentServiceImpl implements IncidentService {
   public MarkIncidentAsOnExternalProcessingResponse markIncidentAsOnExternalProcessing(
       MarkIncidentAsOnExternalProcessingCommand command) {
     Incident incident = findIncidentById(command.getIncidentId());
-    Status oldStatus = incident.getStatus();
     incident.setStatus(Status.EXTERNAL_PROCESSING);
     incidentRepository.save(incident);
     incidentEventPublisher.publishIncidentMarkedAsOnExternalProcessing(
         new IncidentMarkedAsOnExternalProcessingEvent(
             this,
-            oldStatus,
-            Status.EXTERNAL_PROCESSING,
             ZonedDateTime.now()
         )
     );

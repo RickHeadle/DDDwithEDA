@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.rickheadle.dddwitheda.application.services.RequestService;
 import ru.rickheadle.dddwitheda.domain.event.RequestAssignedToTechSupportExpertEvent;
 import ru.rickheadle.dddwitheda.domain.event.RequestCreatedEvent;
 import ru.rickheadle.dddwitheda.domain.event.RequestStatusUpdatedEvent;
@@ -15,6 +14,7 @@ import ru.rickheadle.dddwitheda.domain.model.Request;
 import ru.rickheadle.dddwitheda.domain.model.TechSupportExpert;
 import ru.rickheadle.dddwitheda.domain.model.valueobject.Status;
 import ru.rickheadle.dddwitheda.domain.publisher.RequestEventPublisher;
+import ru.rickheadle.dddwitheda.domain.services.RequestService;
 import ru.rickheadle.dddwitheda.infrastructure.repository.RequestRepository;
 
 @Service

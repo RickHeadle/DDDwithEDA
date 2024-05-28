@@ -6,9 +6,9 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.rickheadle.dddwitheda.application.services.TechSupportExpertService;
 import ru.rickheadle.dddwitheda.domain.model.TechSupportExpert;
 import ru.rickheadle.dddwitheda.domain.model.valueobject.SupportLevel;
+import ru.rickheadle.dddwitheda.domain.services.TechSupportExpertService;
 import ru.rickheadle.dddwitheda.infrastructure.repository.TechSupportExpertRepository;
 
 @Service

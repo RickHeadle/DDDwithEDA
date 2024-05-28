@@ -1,4 +1,4 @@
-package ru.rickheadle.dddwitheda.application.services;
+package ru.rickheadle.dddwitheda.domain.services;
 
 import java.util.List;
 import java.util.Optional;

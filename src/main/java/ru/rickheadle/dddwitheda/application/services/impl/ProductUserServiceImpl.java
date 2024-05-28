@@ -6,8 +6,8 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.rickheadle.dddwitheda.application.services.ProductUserService;
 import ru.rickheadle.dddwitheda.domain.model.ProductUser;
+import ru.rickheadle.dddwitheda.domain.services.ProductUserService;
 import ru.rickheadle.dddwitheda.infrastructure.repository.ProductUserRepository;
 
 @Service

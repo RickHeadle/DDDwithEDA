@@ -20,7 +20,7 @@ import ru.rickheadle.dddwitheda.domain.model.valueobject.IncidentInfluence;
 import ru.rickheadle.dddwitheda.domain.model.valueobject.Status;
 
 @SpringBootTest
-class IncidentServiceImplUnitTest {
+class IncidentServiceUnitTest {
 
   @Autowired
   private IncidentServiceImpl incidentService;

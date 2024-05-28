@@ -8,7 +8,6 @@ import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -42,11 +41,11 @@ class ArchunitApplicationTest {
   /* Class Dependency Checks*/
 
   @Test
-  @Disabled(value = "IncidentDataMapper violates this rule. Disabled for now...")
   void serviceClassesShouldOnlyBeAccessedByController() {
     classes()
         .that().resideInAPackage("..services..")
-        .should().onlyBeAccessed().byAnyPackage("..services..", "..controller..")
+        .should().onlyBeAccessed()
+          .byAnyPackage("..services..", "..controller..", "..mapper..")
         .check(importedClasses);
   }
 
