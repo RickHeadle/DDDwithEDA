@@ -97,7 +97,6 @@ public class IncidentServiceImpl implements IncidentService {
     incident.setTechSupportExpert(
         techSupportExpertService.findTechSupportExpertById(command.getTechSupportExpertId())
             .orElseThrow());
-    //TODO: add publishEvent for setting Assign Status
     incidentRepository.save(incident);
     incidentEventPublisher.publishIncidentAssignedToTechSupportExpertEvent(
         new IncidentAssignedToTechSupportExpertEvent(
