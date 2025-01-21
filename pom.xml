@@ -16,7 +16,7 @@
 	<description>DDDwithEDA</description>
 	<properties>
 		<java.version>21</java.version>
-		<logback.version>1.5.6</logback.version>
+		<logback.version>1.5.13</logback.version>
 	</properties>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
